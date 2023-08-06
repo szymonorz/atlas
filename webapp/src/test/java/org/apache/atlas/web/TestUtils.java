@@ -17,7 +17,7 @@
 
 package org.apache.atlas.web;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class TestUtils {
             throw new Exception("Failed to create dir " + parentFile.getAbsolutePath());
         }
         file.createNewFile();
-        configuration.save(new FileWriter(file));
+        configuration.write(new FileWriter(file));
     }
 
     public static String getTempDirectory() {

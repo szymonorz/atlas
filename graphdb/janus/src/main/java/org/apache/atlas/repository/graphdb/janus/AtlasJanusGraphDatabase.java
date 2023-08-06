@@ -28,8 +28,8 @@ import org.apache.atlas.repository.graphdb.janus.serializer.BigDecimalSerializer
 import org.apache.atlas.repository.graphdb.janus.serializer.BigIntegerSerializer;
 import org.apache.atlas.repository.graphdb.janus.serializer.TypeCategorySerializer;
 import org.apache.atlas.typesystem.types.DataTypes.TypeCategory;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationConverter;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.tinkerpop.gremlin.structure.io.graphson.GraphSONMapper;
 import org.janusgraph.core.JanusGraph;
 import org.janusgraph.core.JanusGraphException;
@@ -215,15 +215,14 @@ public class AtlasJanusGraphDatabase implements GraphDatabase<AtlasJanusVertex, 
     @VisibleForTesting
     static JanusGraph initJanusGraph(Configuration config) {
 
-        org.apache.commons.configuration2.Configuration conf2 = createConfiguration2(config);
         try {
-            return JanusGraphFactory.open(conf2);
+            return JanusGraphFactory.open(config);
         } catch (JanusGraphException e) {
             LOG.warn("JanusGraphException: {}", e.getMessage());
             if (e.getMessage().startsWith(OLDER_STORAGE_EXCEPTION)) {
                 LOG.info("Newer client is being used with older janus storage version. Setting allow-upgrade=true and reattempting connection");
                 config.addProperty("graph.allow-upgrade", true);
-                return JanusGraphFactory.open(conf2);
+                return JanusGraphFactory.open(config);
             } else {
                 throw new RuntimeException(e);
             }
@@ -280,9 +279,7 @@ public class AtlasJanusGraphDatabase implements GraphDatabase<AtlasJanusVertex, 
         try {
             Configuration cfg = getConfiguration();
             cfg.setProperty("storage.batch-loading", true);
-
-            org.apache.commons.configuration2.Configuration conf2 = createConfiguration2(cfg);
-            return JanusGraphFactory.open(conf2);
+            return JanusGraphFactory.open(cfg);
         } catch (IllegalArgumentException ex) {
             LOG.error("getBulkLoadingGraphInstance: Failed!", ex);
         } catch (AtlasException ex) {
@@ -290,12 +287,6 @@ public class AtlasJanusGraphDatabase implements GraphDatabase<AtlasJanusVertex, 
         }
 
         return null;
-    }
-
-    private static org.apache.commons.configuration2.Configuration createConfiguration2(Configuration conf) {
-        Properties properties = ConfigurationConverter.getProperties(conf);
-
-        return org.apache.commons.configuration2.ConfigurationConverter.getConfiguration(properties);
     }
 
     public static void unload() {

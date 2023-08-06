@@ -45,7 +45,7 @@ public class AtlasGraphProvider implements IAtlasGraphProvider {
     private static final String  GRAPH_REPOSITORY_MAX_RETRIES     = "atlas.graph.repository.max.retries";
     private static final String  GRAPH_REPOSITORY_RETRY_SLEEPTIME = "atlas.graph.repository.retry.sleeptime.ms";
 
-    private static org.apache.commons.configuration.Configuration APPLICATION_PROPERTIES = null;
+    private static org.apache.commons.configuration2.Configuration APPLICATION_PROPERTIES = null;
 
     public static <V, E> AtlasGraph<V, E> getGraphInstance() {
         GraphDatabase<?,?> db = getGraphDatabase();      

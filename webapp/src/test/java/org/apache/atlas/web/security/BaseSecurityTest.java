@@ -18,8 +18,8 @@ package org.apache.atlas.web.security;
 
 import org.apache.atlas.ApplicationProperties;
 import org.apache.atlas.web.TestUtils;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.hadoop.minikdc.MiniKdc;
 import org.apache.hadoop.security.ssl.SSLFactory;
 import org.apache.hadoop.security.ssl.SSLHostnameVerifier;
@@ -29,6 +29,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.testng.Assert;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -60,7 +61,7 @@ public class BaseSecurityTest {
 
     protected void generateTestProperties(Properties props) throws ConfigurationException, IOException {
         PropertiesConfiguration config =
-                new PropertiesConfiguration(System.getProperty("user.dir") +
+                ApplicationProperties.init(System.getProperty("user.dir") +
                   "/../src/conf/" + ApplicationProperties.APPLICATION_PROPERTIES);
         for (String propName : props.stringPropertyNames()) {
             config.setProperty(propName, props.getProperty(propName));
@@ -68,7 +69,7 @@ public class BaseSecurityTest {
         File file = new File(System.getProperty("user.dir"), ApplicationProperties.APPLICATION_PROPERTIES);
         file.deleteOnExit();
         Writer fileWriter = new FileWriter(file);
-        config.save(fileWriter);
+        config.write(fileWriter);
     }
 
     protected void startEmbeddedServer(Server server) throws Exception {
@@ -154,7 +155,7 @@ public class BaseSecurityTest {
             url = new File(confLocation, ApplicationProperties.APPLICATION_PROPERTIES).toURI().toURL();
         }
         PropertiesConfiguration configuredProperties = new PropertiesConfiguration();
-        configuredProperties.load(url);
+        configuredProperties.read(new FileReader(url.getFile()));
 
         configuredProperties.copy(configuration);
 
@@ -192,7 +193,7 @@ public class BaseSecurityTest {
         FileUtils.write(policyFile, policyStr.toString());
     }
 
-    public static void persistSSLClientConfiguration(org.apache.commons.configuration.Configuration clientConfig)
+    public static void persistSSLClientConfiguration(org.apache.commons.configuration2.Configuration clientConfig)
             throws AtlasException, IOException {
         //trust settings
         Configuration configuration = new Configuration(false);

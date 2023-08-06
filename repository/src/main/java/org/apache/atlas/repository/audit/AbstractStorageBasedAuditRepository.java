@@ -26,7 +26,7 @@ import org.apache.atlas.listener.ActiveStateChangeHandler;
 import org.apache.atlas.model.audit.EntityAuditEventV2;
 import org.apache.atlas.service.Service;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration2.Configuration;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

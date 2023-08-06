@@ -61,7 +61,7 @@ public class SecureClientUtils {
 
 
     public  URLConnectionClientHandler getClientConnectionHandler(DefaultClientConfig config,
-            org.apache.commons.configuration.Configuration clientConfig, String doAsUser,
+            org.apache.commons.configuration2.Configuration clientConfig, String doAsUser,
             final UserGroupInformation ugi) {
         config.getProperties().put(URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND, true);
         Configuration conf = new Configuration();
@@ -200,7 +200,7 @@ public class SecureClientUtils {
         return new File(sslDir, SecurityProperties.SSL_CLIENT_PROPERTIES);
     }
 
-    public static void persistSSLClientConfiguration(org.apache.commons.configuration.Configuration clientConfig, String confLocation)
+    public static void persistSSLClientConfiguration(org.apache.commons.configuration2.Configuration clientConfig, String confLocation)
     throws AtlasException, IOException {
         //trust settings
         Configuration configuration = new Configuration(false);

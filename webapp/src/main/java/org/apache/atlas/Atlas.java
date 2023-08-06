@@ -25,8 +25,8 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.util.ShutdownHookManager;
 import org.slf4j.Logger;
@@ -99,7 +99,7 @@ public final class Atlas {
 
     public static void main(String[] args) throws Exception {
         CommandLine cmd = parseArgs(args);
-        PropertiesConfiguration buildConfiguration = new PropertiesConfiguration("atlas-buildinfo.properties");
+        PropertiesConfiguration buildConfiguration = ApplicationProperties.init("atlas-buildinfo.properties");
         String appPath = "webapp/target/atlas-webapp-" + getProjectVersion(buildConfiguration);
 
         if (cmd.hasOption(APP_PATH)) {

@@ -21,12 +21,13 @@ package org.apache.atlas.web.security;
 import org.apache.atlas.ApplicationProperties;
 import org.apache.atlas.AtlasClient;
 import org.apache.atlas.web.TestUtils;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.security.alias.JavaKeyStoreProvider;
 import org.testng.annotations.Test;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -80,7 +81,7 @@ public class SSLAndKerberosTest extends BaseSSLAndKerberosTest {
         } else {
             url = new File(confLocation, ApplicationProperties.APPLICATION_PROPERTIES).toURI().toURL();
         }
-        configuration.load(url);
+        configuration.read(new FileReader(url.getFile()));
         configuration.setProperty(TLS_ENABLED, true);
         configuration.setProperty("atlas.authentication.method.kerberos", "true");
         configuration.setProperty("atlas.authentication.keytab",userKeytabFile.getAbsolutePath());
