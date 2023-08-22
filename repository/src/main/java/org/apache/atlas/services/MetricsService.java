@@ -321,8 +321,7 @@ public class MetricsService {
                 .collect(Collectors.toList());
 
         for (AtlasMetricsStat a : metricsStats) {
-            long collectedTime = a.getCollectionTime();
-            deleteMetricsStatByCollectionTime(String.valueOf(collectedTime));
+            deleteMetricsStat(a);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -382,6 +381,37 @@ public class MetricsService {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("<== MetricsService.deleteMetricsStatByCollectionTime({})", collectionTime);
+        }
+
+    }
+
+    @GraphTransaction
+    public void deleteMetricsStat(final AtlasMetricsStat deleteStat) throws AtlasBaseException {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("==> MetricsService.deleteMetricsStat({})", deleteStat);
+        }
+
+        String guid = deleteStat.getGuid();
+        if (StringUtils.isEmpty(guid)) {
+            throw new AtlasBaseException(AtlasErrorCode.INVALID_PARAMETERS, guid);
+        }
+
+        dataAccess.delete(guid);
+
+        // delete log
+        if (LOG.isDebugEnabled()) {
+            long currTime      = System.currentTimeMillis();
+            long collectedTime = deleteStat.getCollectionTime();
+
+            LOG.info("MetricsService.deleteMetricsStat(): At {}, metricsStat with collectionTime: {}, persisted hours: {}, is deleted. ",
+                    Instant.ofEpochMilli(currTime),
+                    Instant.ofEpochMilli(collectedTime),
+                    TimeUnit.MILLISECONDS.toHours(currTime - collectedTime)
+            );
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("<== MetricsService.deleteMetricsStat({})", deleteStat);
         }
 
     }
